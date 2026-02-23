@@ -34,7 +34,7 @@ const PerfumeDetail = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <button 
+            <button
                 onClick={() => navigate('/')}
                 className="mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
             >
@@ -44,8 +44,8 @@ const PerfumeDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
                     {perfume.uri ? (
-                        <img 
-                            src={perfume.uri} 
+                        <img
+                            src={perfume.uri}
                             alt={perfume.perfumeName}
                             className="w-full h-full object-cover"
                         />
@@ -90,12 +90,16 @@ const PerfumeDetail = () => {
                         {perfume.comments.length > 0 && (
                             <div>
                                 <h2 className="text-lg font-semibold mb-2">Comments</h2>
-                                <div className="border rounded-lg p-4 bg-gray-50">
-                                    <div className="flex items-center mb-2">
-                                        <span className="font-semibold">{perfume.comments.author.name}</span>
-                                        <span className="ml-2 text-yellow-500">★ {perfume.comments.rating}/5</span>
-                                    </div>
-                                    <p className="text-gray-700">{perfume.comments.content}</p>
+                                <div className="flex flex-col gap-3">
+                                    {perfume.comments.map((comment) => (
+                                        <div key={comment._id} className="border rounded-lg p-4 bg-gray-50">
+                                            <div className="flex items-center mb-2">
+                                                <span className="font-semibold">{comment.author.name}</span>
+                                                <span className="ml-2 text-yellow-500">★ {comment.rating}/3</span>
+                                            </div>
+                                            <p className="text-gray-700">{comment.content}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}

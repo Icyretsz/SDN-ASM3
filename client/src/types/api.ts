@@ -4,6 +4,11 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
 export interface User {
   _id: string,
   name: string,

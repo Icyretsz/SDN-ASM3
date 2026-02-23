@@ -33,7 +33,7 @@ app.use(cors())
 app.use('/', indexRouter);
 app.use('/api/brand', brandRouter);
 app.use('/api/perfume', perfumeRouter);
-app.use('/auth', memberRouter)
+app.use('/api/auth', memberRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -9,7 +9,7 @@ const authMiddleware = async (req, res, next) => {
     if (!token) return res.status(401).json({ message: 'No token provided' });
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    const account = await Member.findById(decoded.memberId);
+    const account = await Member.findById(decoded.id);
     if (!account) return res.status(401).json({ message: 'Account not found' });
 
     req.user = account;
@@ -18,5 +18,9 @@ const authMiddleware = async (req, res, next) => {
     res.status(401).json({ message: 'Invalid token' });
   }
 };
+
+const userCheck = async (req, res, next) => {
+
+}
 
 module.exports = authMiddleware;

@@ -5,4 +5,7 @@ memberRouter.route('/login')
     .post(MemberController.login)
 memberRouter.route('/signup')
     .post(MemberController.signUp)
+memberRouter.route('/:id')
+    .put(MemberController.update)
+    .put(MemberController.changePassword)
 module.exports = memberRouter
