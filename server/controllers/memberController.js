@@ -20,7 +20,17 @@ exports.login = async (req, res) => {
             yob: findAcc.yob,
             gender: findAcc.gender,
         }, jwtSecret, { expiresIn: '1h' })
-        res.json({ success: true, accessToken })
+        res.json({ success: true, data: {
+            accessToken: accessToken,
+            user: {
+                id: findAcc._id,
+                email: email,
+                name: findAcc.name,
+                yob: findAcc.yob,
+                gender: findAcc.gender,
+                isAdmin: findAcc.isAdmin
+            }
+            } })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

@@ -8,7 +8,7 @@
     "ingredients": "Aldehyde, Rose, Jasmine, Sandalwood, Vetiver",
     "volume": 100,
     "targetAudience": "female",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6c" }
   },
   {
@@ -20,7 +20,7 @@
     "ingredients": "Citrus, Labdanum, Sandalwood, Cedar, Vetiver",
     "volume": 100,
     "targetAudience": "male",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6c" }
   },
   {
@@ -32,7 +32,7 @@
     "ingredients": "Bergamot, Pepper, Lavender, Vetiver, Ambroxan",
     "volume": 100,
     "targetAudience": "male",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6d" }
   },
   {
@@ -44,7 +44,7 @@
     "ingredients": "Mandarin, Rose, Peony, Patchouli, Musk",
     "volume": 50,
     "targetAudience": "female",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6d" }
   },
   {
@@ -56,7 +56,7 @@
     "ingredients": "Black Truffle, Ylang-Ylang, Black Orchid, Patchouli, Vanilla",
     "volume": 50,
     "targetAudience": "unisex",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6e" }
   },
   {
@@ -68,7 +68,7 @@
     "ingredients": "Oud, Rosewood, Cardamom, Sandalwood, Vetiver",
     "volume": 50,
     "targetAudience": "unisex",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6e" }
   },
   {
@@ -80,7 +80,7 @@
     "ingredients": "Tuberose, Jasmine, Rangoon Creeper, Sandalwood",
     "volume": 100,
     "targetAudience": "female",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6f" }
   },
   {
@@ -92,7 +92,7 @@
     "ingredients": "Lemon, Lavender, Orange Blossom, Cedarwood, Patchouli",
     "volume": 90,
     "targetAudience": "male",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d6f" }
   },
   {
@@ -104,7 +104,7 @@
     "ingredients": "Coffee, White Flowers, Vanilla, Patchouli, Cedar",
     "volume": 90,
     "targetAudience": "female",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d70" }
   },
   {
@@ -116,7 +116,7 @@
     "ingredients": "Lavender, Orange Blossom, Musk, Vanilla, Ambergris",
     "volume": 90,
     "targetAudience": "female",
-    "comments": {},
+    "comments": [],
     "brand": { "$oid": "699caaf5fa632835c2271d70" }
   }
 ]

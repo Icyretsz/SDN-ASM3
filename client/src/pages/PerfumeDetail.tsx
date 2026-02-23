@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router';
-import { usePerfumeQuery } from '../hooks/usePerfumes';
+import { usePerfumeQuery } from '../hooks/usePerfumes.ts';
 
 const PerfumeDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -87,7 +87,7 @@ const PerfumeDetail = () => {
                             <p className="text-gray-700">{perfume.ingredients}</p>
                         </div>
 
-                        {perfume.comments && (
+                        {perfume.comments.length > 0 && (
                             <div>
                                 <h2 className="text-lg font-semibold mb-2">Comments</h2>
                                 <div className="border rounded-lg p-4 bg-gray-50">

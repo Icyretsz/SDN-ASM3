@@ -1,4 +1,4 @@
-import { usePerfumesQuery } from '../hooks/usePerfumes';
+import { usePerfumesQuery } from '../hooks/usePerfumes.ts';
 import { useNavigate } from 'react-router';
 import { useState, useMemo } from 'react';
 

@@ -11,8 +11,11 @@ export interface User {
   yob: string,
   gender: 'male' | 'female',
   isAdmin: boolean,
-  createdAt: string,
-  updatedAt: string,
+}
+
+export interface LoginDataResponse {
+  accessToken: string,
+  user: User,
 }
 
 export interface Brand {
@@ -39,7 +42,7 @@ export interface Perfume {
   ingredients: string;
   volume: number;
   targetAudience: 'male' | 'female' | 'unisex';
-  comments: Comment,
+  comments: Comment[],
   brand: Brand,
 }
 
