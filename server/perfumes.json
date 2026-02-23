@@ -1,0 +1,122 @@
+[
+  {
+    "perfumeName": "Chanel No.5",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.28711.2x.avif",
+    "price": 150,
+    "concentration": "EDP",
+    "description": "A timeless floral aldehyde fragrance, the world's most iconic perfume.",
+    "ingredients": "Aldehyde, Rose, Jasmine, Sandalwood, Vetiver",
+    "volume": 100,
+    "targetAudience": "female",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6c" }
+  },
+  {
+    "perfumeName": "Bleu de Chanel",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.25967.2x.avif",
+    "price": 135,
+    "concentration": "EDT",
+    "description": "A woody aromatic fragrance with a fresh, clean character.",
+    "ingredients": "Citrus, Labdanum, Sandalwood, Cedar, Vetiver",
+    "volume": 100,
+    "targetAudience": "male",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6c" }
+  },
+  {
+    "perfumeName": "Dior Sauvage",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.31861.2x.avif",
+    "price": 120,
+    "concentration": "EDT",
+    "description": "A fresh and raw fragrance inspired by vast, wild open spaces.",
+    "ingredients": "Bergamot, Pepper, Lavender, Vetiver, Ambroxan",
+    "volume": 100,
+    "targetAudience": "male",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6d" }
+  },
+  {
+    "perfumeName": "Miss Dior",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.68905.2x.avif",
+    "price": 130,
+    "concentration": "EDP",
+    "description": "A floral chypre fragrance full of femininity and elegance.",
+    "ingredients": "Mandarin, Rose, Peony, Patchouli, Musk",
+    "volume": 50,
+    "targetAudience": "female",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6d" }
+  },
+  {
+    "perfumeName": "Tom Ford Black Orchid",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.62199.2x.avif",
+    "price": 200,
+    "concentration": "Extrait",
+    "description": "A luxurious and sensual fragrance with dark and glamorous notes.",
+    "ingredients": "Black Truffle, Ylang-Ylang, Black Orchid, Patchouli, Vanilla",
+    "volume": 50,
+    "targetAudience": "unisex",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6e" }
+  },
+  {
+    "perfumeName": "Tom Ford Oud Wood",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.1826.2x.avif",
+    "price": 220,
+    "concentration": "EDP",
+    "description": "A rare oud wood accord blended with exotic spices and resins.",
+    "ingredients": "Oud, Rosewood, Cardamom, Sandalwood, Vetiver",
+    "volume": 50,
+    "targetAudience": "unisex",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6e" }
+  },
+  {
+    "perfumeName": "Gucci Bloom",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.44894.2x.avif",
+    "price": 110,
+    "concentration": "EDP",
+    "description": "A rich floral fragrance inspired by a garden in full bloom.",
+    "ingredients": "Tuberose, Jasmine, Rangoon Creeper, Sandalwood",
+    "volume": 100,
+    "targetAudience": "female",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6f" }
+  },
+  {
+    "perfumeName": "Gucci Guilty",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.43040.2x.avif",
+    "price": 100,
+    "concentration": "EDT",
+    "description": "A bold and sensual oriental fragrance for the modern man.",
+    "ingredients": "Lemon, Lavender, Orange Blossom, Cedarwood, Patchouli",
+    "volume": 90,
+    "targetAudience": "male",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d6f" }
+  },
+  {
+    "perfumeName": "YSL Black Opium",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.25324.2x.avif",
+    "price": 115,
+    "concentration": "EDP",
+    "description": "An addictive gourmand fragrance with coffee and vanilla notes.",
+    "ingredients": "Coffee, White Flowers, Vanilla, Patchouli, Cedar",
+    "volume": 90,
+    "targetAudience": "female",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d70" }
+  },
+  {
+    "perfumeName": "YSL Libre",
+    "uri": "https://fimgs.net/mdimg/perfume-thumbs/dark-375x500.102207.2x.avif",
+    "price": 125,
+    "concentration": "EDP",
+    "description": "A freedom-inspired fragrance blending lavender and orange blossom.",
+    "ingredients": "Lavender, Orange Blossom, Musk, Vanilla, Ambergris",
+    "volume": 90,
+    "targetAudience": "female",
+    "comments": {},
+    "brand": { "$oid": "699caaf5fa632835c2271d70" }
+  }
+]

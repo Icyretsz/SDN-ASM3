@@ -9,6 +9,7 @@ var brandRouter = require('./routes/brandRouter');
 var perfumeRouter = require('./routes/perfumeRouter');
 const mongoose = require('mongoose')
 const memberRouter = require("./routes/memberRouter");
+var cors = require('cors')
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors())
 
 app.use('/', indexRouter);
 app.use('/api/brand', brandRouter);
