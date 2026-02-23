@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
         const accessToken = jwt.sign({
-            id: findAcc._id,
+            _id: findAcc._id,
             email: email,
             name: findAcc.name,
             yob: findAcc.yob,
@@ -25,7 +25,7 @@ exports.login = async (req, res) => {
         res.json({ success: true, data: {
             accessToken: accessToken,
             user: {
-                id: findAcc._id,
+                _id: findAcc._id,
                 email: email,
                 name: findAcc.name,
                 yob: findAcc.yob,
@@ -64,6 +64,7 @@ exports.update = async (req, res) => {
         const { id } = req.params
         const { email, name, yob, gender } = req.body
         const currentAccount = req.user
+        const jwtSecret = process.env.JWT_SECRET
 
         if (id !== currentAccount.id && !currentAccount.isAdmin) {
             return res.status(403).json({ success: false, message: "Can't update other user's account" })
@@ -79,7 +80,26 @@ exports.update = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' })
         }
 
-        res.status(200).json({ success: true, data: updated })
+        const accessToken = jwt.sign({
+            _id: updated._id,
+            email: email,
+            name: updated.name,
+            yob: updated.yob,
+            gender: updated.gender,
+            isAdmin: updated.isAdmin
+        }, jwtSecret, { expiresIn: '1h' })
+
+        res.status(200).json({ success: true, data: {
+            accessToken: accessToken,
+            user: {
+                _id: updated._id,
+                email: email,
+                name: updated.name,
+                yob: updated.yob,
+                gender: updated.gender,
+                isAdmin: updated.isAdmin
+            }
+            } })
     } catch (error) {
         res.status(500).json({ success: false, message: error.message })
     }

@@ -44,3 +44,31 @@ export const useLogout = () => {
         clearAuth();
     };
 };
+export const useUpdateProfileMutation = () => {
+  const setAuth = useAuthStore((state) => state.setAuth);
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  return useMutation({
+    mutationFn: async ({ userId, data }: { userId: string; data: Partial<User> }) => {
+      const response = await api.put<ApiResponse<LoginDataResponse>>(`/auth/${userId}`, data);
+      return response.data.data;
+    },
+    onSuccess: (data : LoginDataResponse) => {
+      if (data && accessToken) {
+        setAuth(data.accessToken, data.user);
+      }
+    },
+  });
+};
+
+export const useChangePasswordMutation = () => {
+  return useMutation({
+    mutationFn: async ({ userId, oldPassword, newPassword }: { userId: string; oldPassword: string; newPassword: string }) => {
+      const response = await api.put<ApiResponse<void>>(`/auth/${userId}/change-password`, {
+        oldPassword,
+        newPassword,
+      });
+      return response.data;
+    },
+  });
+};
