@@ -28,8 +28,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('api/brand', brandRouter);
-app.use('api/perfume', perfumeRouter);
+app.use('/api/brand', brandRouter);
+app.use('/api/perfume', perfumeRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

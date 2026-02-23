@@ -17,5 +17,5 @@ const perfumeSchema = new mongoose.Schema({
     comments: [commentSchema],
     brand:{type: mongoose.Schema.Types.ObjectId, ref: "Brands", require: true},
 },{ timestamps: true, });
-const Brand=mongoose.model('Brands', perfumeSchema)
-module.exports=Brand
+const Perfume = mongoose.model('Perfumes', perfumeSchema)
+module.exports = Perfume
