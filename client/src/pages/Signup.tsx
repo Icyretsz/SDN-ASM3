@@ -11,6 +11,8 @@ const Signup = () => {
     yob: '',
     gender: 'male' as 'male' | 'female',
   });
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const signupMutation = useSignupMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -22,6 +24,13 @@ const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (formData.password !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return;
+    }
+    
+    setPasswordError('');
     
     try {
       await signupMutation.mutateAsync(formData);
@@ -85,6 +94,30 @@ const Signup = () => {
             </div>
 
             <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Re-enter Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (passwordError) setPasswordError('');
+                }}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {passwordError && (
+              <div className="text-red-600 text-sm">
+                {passwordError}
+              </div>
+            )}
+
+            <div>
               <label htmlFor="yob" className="block text-sm font-medium text-gray-700">
                 Year of Birth
               </label>
@@ -120,7 +153,7 @@ const Signup = () => {
 
           {signupMutation.isError && (
             <div className="text-red-600 text-sm text-center">
-              Signup failed. Please try again.
+              {signupMutation.error?.response?.data?.message || 'Signup failed. Please try again.'}
             </div>
           )}
 

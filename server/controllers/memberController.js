@@ -43,7 +43,7 @@ exports.signUp = async (req, res) => {
         const { email, password, name, yob, gender } = req.body
         const findAcc = await Member.findOne({ email })
         if (findAcc) {
-            return res.status(500).json({status: false, message: "User already exists"})
+            return res.status(500).json({status: false, message: "Email already exists"})
         }
         const hashPassword = await bcrypt.hash(password, 8)
         const newAccount = await Member.create({

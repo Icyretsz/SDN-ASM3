@@ -61,7 +61,7 @@ const Login = () => {
 
           {loginMutation.isError && (
             <div className="text-red-600 text-sm text-center">
-              Login failed. Please check your credentials.
+              {loginMutation.error?.response?.data?.message || 'Login failed. Please check your credentials.'}
             </div>
           )}
 

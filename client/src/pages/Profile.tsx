@@ -8,7 +8,7 @@ const Profile = () => {
   const user = useAuthStore((state) => state.user);
   const updateProfileMutation = useUpdateProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
-  const { data: userComments, isLoading: commentsLoading } = useUserComments(user?._id || '');
+  const { data: userComments, isLoading: commentsLoading, isError: commentsError, error: commentsErrorData } = useUserComments(user?._id || '');
 
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
@@ -157,7 +157,7 @@ const Profile = () => {
 
           {updateProfileMutation.isError && (
             <div className="text-red-600 text-sm">
-              Profile update failed. Please try again.
+              {updateProfileMutation.error?.response?.data?.message || 'Profile update failed. Please try again.'}
             </div>
           )}
 
@@ -236,7 +236,7 @@ const Profile = () => {
 
             {changePasswordMutation.isError && (
               <div className="text-red-600 text-sm">
-                Password change failed. Please check your current password.
+                {changePasswordMutation.error?.response?.data?.message || 'Password change failed. Please check your current password.'}
               </div>
             )}
 
@@ -273,6 +273,10 @@ const Profile = () => {
         <h2 className="text-2xl font-semibold mb-4">My Comments</h2>
         {commentsLoading ? (
           <p className="text-gray-500">Loading comments...</p>
+        ) : commentsError ? (
+          <div className="text-red-600 text-sm">
+            {commentsErrorData?.response?.data?.message || 'Failed to load comments. Please try again later.'}
+          </div>
         ) : userComments && userComments.length > 0 ? (
           <div className="space-y-4">
             {userComments.map((comment) => (
@@ -281,7 +285,7 @@ const Profile = () => {
                   <div className="flex-1">
                     <h3 
                       className="font-semibold text-lg text-blue-600 hover:text-blue-800 cursor-pointer"
-                      onClick={() => navigate(`/perfumes/${comment.perfume._id}`)}
+                      onClick={() => navigate(`/perfume/${comment.perfume._id}`)}
                     >
                       {comment.perfume.perfumeName}
                     </h3>
