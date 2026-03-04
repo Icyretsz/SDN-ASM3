@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import api from '../services/api';
-import type { ApiResponse, LoginCredentials, LoginDataResponse, User } from '../types/api';
+import type { ApiResponse, LoginCredentials, LoginDataResponse, User, UserCommentType } from '../types/api';
 import { useAuthStore } from '../stores/authStore';
 
 type SignupCredentials = Omit<User, 'isAdmin'>
@@ -72,3 +72,15 @@ export const useChangePasswordMutation = () => {
     },
   });
 };
+
+export const useUserComments = (userId: string) => {
+  return useQuery({
+    queryKey: ['userComments', userId],
+    queryFn: async () => {
+      const response = await api.get<ApiResponse<UserCommentType[]>>(`/auth/${userId}/comments`);
+      return response.data.data;
+    },
+    enabled: !!userId,
+  });
+};
+

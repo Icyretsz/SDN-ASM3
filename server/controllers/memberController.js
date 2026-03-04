@@ -134,3 +134,37 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({ success: false, message: error.message })
     }
 }
+
+
+exports.getUserComments = async (req, res) => {
+    try {
+        const { id } = req.params
+        const Perfume = require('../models/perfume')
+
+        const perfumes = await Perfume.find({ 'comments.author': id })
+            .populate('brand')
+            .populate('comments.author')
+
+        const userComments = []
+        perfumes.forEach(perfume => {
+            perfume.comments.forEach(comment => {
+                if (comment.author._id.toString() === id) {
+                    userComments.push({
+                        ...comment.toObject(),
+                        perfume: {
+                            _id: perfume._id,
+                            perfumeName: perfume.perfumeName,
+                            uri: perfume.uri,
+                            brand: perfume.brand
+                        }
+                    })
+                }
+            })
+        })
+
+        res.status(200).json({ success: true, data: userComments })
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message })
+    }
+}
+

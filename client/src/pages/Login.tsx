@@ -13,7 +13,9 @@ const Login = () => {
     
     try {
       await loginMutation.mutateAsync({ email, password });
-      navigate('/');
+      const returnPath = localStorage.getItem('return-path');
+      localStorage.removeItem('return-path');
+      navigate(returnPath ? returnPath : '/');
     } catch (error) {
       console.error('Login failed:', error);
     }

@@ -8,6 +8,8 @@ memberRouter.route('/signup')
     .post(MemberController.signUp)
 memberRouter.route('/:id/change-password')
     .put(authMiddleware, MemberController.changePassword)
+memberRouter.route('/:id/comments')
+    .get(authMiddleware, MemberController.getUserComments)
 memberRouter.route('/:id')
     .put(authMiddleware, MemberController.update)
 module.exports = memberRouter

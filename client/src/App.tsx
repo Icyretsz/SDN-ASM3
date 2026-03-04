@@ -11,13 +11,15 @@ function App() {
     return (
         <>
             <Header />
-            <Routes>
-                <Route index element={<Home />} />
-                <Route path="/perfumes/:id" element={<PerfumeDetail />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/profile" element={<Profile />} />
-            </Routes>
+            <div className="w-[70%] mx-auto">
+                <Routes>
+                    <Route index element={<Home />} />
+                    <Route path="/perfumes/:id" element={<PerfumeDetail />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/profile" element={<Profile />} />
+                </Routes>
+            </div>
         </>
     )
 }

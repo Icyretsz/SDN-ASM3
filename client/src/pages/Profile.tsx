@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuthStore } from '../stores/authStore';
-import { useUpdateProfileMutation, useChangePasswordMutation } from '../hooks/useAuth';
+import { useUpdateProfileMutation, useChangePasswordMutation, useUserComments } from '../hooks/useAuth';
 
 const Profile = () => {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const updateProfileMutation = useUpdateProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
+  const { data: userComments, isLoading: commentsLoading } = useUserComments(user?._id || '');
 
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
@@ -265,6 +266,48 @@ const Profile = () => {
               </button>
             </div>
           </form>
+        )}
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+        <h2 className="text-2xl font-semibold mb-4">My Comments</h2>
+        {commentsLoading ? (
+          <p className="text-gray-500">Loading comments...</p>
+        ) : userComments && userComments.length > 0 ? (
+          <div className="space-y-4">
+            {userComments.map((comment) => (
+              <div key={comment._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <h3 
+                      className="font-semibold text-lg text-blue-600 hover:text-blue-800 cursor-pointer"
+                      onClick={() => navigate(`/perfumes/${comment.perfume._id}`)}
+                    >
+                      {comment.perfume.perfumeName}
+                    </h3>
+                    <p className="text-sm text-gray-500">{comment.perfume.brand.brandName}</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {[...Array(3)].map((_, i) => (
+                      <span key={i} className={i < comment.rating ? 'text-yellow-400' : 'text-gray-300'}>
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-2">{comment.content}</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">You haven't written any comments yet.</p>
         )}
       </div>
     </div>

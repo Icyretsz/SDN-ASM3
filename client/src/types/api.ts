@@ -30,11 +30,13 @@ export interface Brand {
   updatedAt: string,
 }
 
-export interface Comment {
+export interface CommentType {
   _id: string;
   rating: number;
   content: string;
-  author: User
+  author: User;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Perfume {
@@ -47,7 +49,16 @@ export interface Perfume {
   ingredients: string;
   volume: number;
   targetAudience: 'male' | 'female' | 'unisex';
-  comments: Comment[],
+  comments: CommentType[],
   brand: Brand,
+}
+
+export interface UserCommentType extends CommentType {
+  perfume: {
+    _id: string;
+    perfumeName: string;
+    uri: string;
+    brand: Brand;
+  };
 }
 

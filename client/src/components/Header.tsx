@@ -1,17 +1,30 @@
 import AuthButton from "./AuthButton.tsx";
 import { useAuthStore } from "../stores/authStore";
 import { useLogout } from "../hooks/useAuth";
-import { useNavigate } from "react-router";
+import {useLocation, useNavigate} from "react-router";
 
 const Header = () => {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
     const logout = useLogout();
+    const location = useLocation();
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+    const handleAuth = (authType: 'login' | 'signup' | 'signout') => {
+        if (authType !== 'signout') {
+            localStorage.setItem("return-path", location.pathname);
+        }
+        switch (authType) {
+            case 'login':
+                navigate('/login');
+                break;
+            case 'signup':
+                navigate('/signup');
+                break;
+            case 'signout':
+                logout();
+                break;
+        }
+    }
 
     return (
         <header className='w-full h-20 px-26 bg-red-200 flex justify-between items-center'>
@@ -25,12 +38,12 @@ const Header = () => {
                         >
                             Welcome, {user.name}
                         </span>
-                        <AuthButton type='signout' onClick={handleLogout}/>
+                        <AuthButton type='signout' onClick={() => handleAuth('signout')}/>
                     </>
                 ) : (
                     <>
-                        <AuthButton type='login' onClick={() => navigate('/login')}/>
-                        <AuthButton type='signup' onClick={() => navigate('/signup')}/>
+                        <AuthButton type='login' onClick={() => handleAuth('login')}/>
+                        <AuthButton type='signup' onClick={() => handleAuth('signup')}/>
                     </>
                 )}
             </section>
