@@ -43,7 +43,7 @@ export const useCreatePerfumeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: Omit<Perfume, 'id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (data: Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }): Promise<Perfume> => {
       const response = await api.post<ApiResponse<Perfume>>('/perfume', data);
       return response.data.data;
     },
@@ -57,7 +57,7 @@ export const useUpdatePerfumeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ perfumeId, data }: { perfumeId: string; data: Partial<Perfume> }) => {
+    mutationFn: async ({ perfumeId, data }: { perfumeId: string; data: Partial<Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }> }): Promise<Perfume> => {
       const response = await api.put<ApiResponse<Perfume>>(`/perfume/${perfumeId}`, data);
       return response.data.data;
     },
@@ -72,9 +72,8 @@ export const useDeletePerfumeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (perfumeId: number) => {
-      const response = await api.delete<ApiResponse<void>>(`/perfume/${perfumeId}`);
-      return response.data;
+    mutationFn: async (perfumeId: string): Promise<void> => {
+      await api.delete(`/perfume/${perfumeId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: perfumeKeys.all });

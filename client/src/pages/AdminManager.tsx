@@ -1,54 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { useAuthStore } from '../stores/authStore';
-import api from '../services/api';
-import type { Brand, Perfume, ApiResponse } from '../types/api';
-
-// API functions
-const fetchBrands = async (): Promise<Brand[]> => {
-  const response = await api.get<ApiResponse<Brand[]>>('/brand');
-  return response.data.data;
-};
-
-const fetchPerfumes = async (): Promise<Perfume[]> => {
-  const response = await api.get<ApiResponse<Perfume[]>>('/perfume');
-  return response.data.data;
-};
-
-const createBrand = async (brandData: { brandName: string }): Promise<Brand> => {
-  const response = await api.post<ApiResponse<Brand>>('/brand', brandData);
-  return response.data.data;
-};
-
-const deleteBrand = async (id: string): Promise<void> => {
-  await api.delete(`/brand/${id}`);
-};
-
-const createPerfume = async (perfumeData: Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }): Promise<Perfume> => {
-  const response = await api.post<ApiResponse<Perfume>>('/perfume', perfumeData);
-  return response.data.data;
-};
-
-const updatePerfume = async ({ id, data }: { id: string; data: Partial<Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }> }): Promise<Perfume> => {
-  const response = await api.put<ApiResponse<Perfume>>(`/perfume/${id}`, data);
-  return response.data.data;
-};
-
-const deletePerfume = async (id: string): Promise<void> => {
-  await api.delete(`/perfume/${id}`);
-};
+import type { Perfume } from '../types/api';
+import { useBrandsQuery, useCreateBrandMutation, useDeleteBrandMutation } from '../hooks/useBrands';
+import { 
+  usePerfumesQuery, 
+  useCreatePerfumeMutation, 
+  useUpdatePerfumeMutation, 
+  useDeletePerfumeMutation 
+} from '../hooks/usePerfumes';
 
 const AdminManager: React.FC = () => {
   const { user } = useAuthStore();
-  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<'brands' | 'perfumes'>('brands');
   const [showBrandForm, setShowBrandForm] = useState(false);
   const [showPerfumeForm, setShowPerfumeForm] = useState(false);
   const [editingPerfume, setEditingPerfume] = useState<Perfume | null>(null);
-
-  useEffect(() => {
-    console.log('user', user)
-  }, [user])
 
   // Brand form state
   const [brandName, setBrandName] = useState('');
@@ -67,59 +33,15 @@ const AdminManager: React.FC = () => {
   });
 
   // Queries
-  const { data: brands = [], isLoading: brandsLoading } = useQuery({
-    queryKey: ['brands'],
-    queryFn: fetchBrands,
-    enabled: !!user?.isAdmin
-  });
-
-  const { data: perfumes = [], isLoading: perfumesLoading } = useQuery({
-    queryKey: ['perfumes'],
-    queryFn: fetchPerfumes,
-    enabled: !!user?.isAdmin
-  });
+  const { data: brands = [], isLoading: brandsLoading } = useBrandsQuery();
+  const { data: perfumes = [], isLoading: perfumesLoading } = usePerfumesQuery();
 
   // Mutations
-  const createBrandMutation = useMutation({
-    mutationFn: createBrand,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['brands'] });
-      setBrandName('');
-      setShowBrandForm(false);
-    }
-  });
-
-  const deleteBrandMutation = useMutation({
-    mutationFn: deleteBrand,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['brands'] });
-    }
-  });
-
-  const createPerfumeMutation = useMutation({
-    mutationFn: createPerfume,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['perfumes'] });
-      resetPerfumeForm();
-      setShowPerfumeForm(false);
-    }
-  });
-
-  const updatePerfumeMutation = useMutation({
-    mutationFn: updatePerfume,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['perfumes'] });
-      resetPerfumeForm();
-      setEditingPerfume(null);
-    }
-  });
-
-  const deletePerfumeMutation = useMutation({
-    mutationFn: deletePerfume,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['perfumes'] });
-    }
-  });
+  const createBrandMutation = useCreateBrandMutation();
+  const deleteBrandMutation = useDeleteBrandMutation();
+  const createPerfumeMutation = useCreatePerfumeMutation();
+  const updatePerfumeMutation = useUpdatePerfumeMutation();
+  const deletePerfumeMutation = useDeletePerfumeMutation();
 
   const resetPerfumeForm = () => {
     setPerfumeForm({
@@ -138,7 +60,12 @@ const AdminManager: React.FC = () => {
   const handleCreateBrand = (e: React.FormEvent) => {
     e.preventDefault();
     if (brandName.trim()) {
-      createBrandMutation.mutate({ brandName: brandName.trim() });
+      createBrandMutation.mutate({ brandName: brandName.trim() }, {
+        onSuccess: () => {
+          setBrandName('');
+          setShowBrandForm(false);
+        }
+      });
     }
   };
 
@@ -146,11 +73,22 @@ const AdminManager: React.FC = () => {
     e.preventDefault();
     if (editingPerfume) {
       updatePerfumeMutation.mutate({
-        id: editingPerfume._id,
+        perfumeId: editingPerfume._id,
         data: perfumeForm
+      }, {
+        onSuccess: () => {
+          resetPerfumeForm();
+          setEditingPerfume(null);
+          setShowPerfumeForm(false);
+        }
       });
     } else {
-      createPerfumeMutation.mutate(perfumeForm);
+      createPerfumeMutation.mutate(perfumeForm, {
+        onSuccess: () => {
+          resetPerfumeForm();
+          setShowPerfumeForm(false);
+        }
+      });
     }
   };
 
@@ -293,6 +231,7 @@ const AdminManager: React.FC = () => {
           )}
         </div>
       )}
+
       {/* Perfumes Tab */}
       {activeTab === 'perfumes' && (
         <div>
