@@ -32,6 +32,14 @@ const Header = () => {
             <section className='flex gap-5 items-center'>
                 {user ? (
                     <>
+                        {user.isAdmin && (
+                            <span 
+                                className='text-gray-700 cursor-pointer hover:text-blue-600 transition-colors font-medium'
+                                onClick={() => navigate('/admin')}
+                            >
+                                Admin Panel
+                            </span>
+                        )}
                         <span 
                             className='text-gray-700 cursor-pointer hover:text-blue-600 transition-colors'
                             onClick={() => navigate('/profile')}

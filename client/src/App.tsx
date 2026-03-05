@@ -5,6 +5,7 @@ import PerfumeDetail from "./pages/PerfumeDetail.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import Profile from "./pages/Profile.tsx";
+import AdminManager from "./pages/AdminManager.tsx";
 import Header from "./components/Header.tsx";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/admin" element={<AdminManager />} />
                 </Routes>
             </div>
         </>
