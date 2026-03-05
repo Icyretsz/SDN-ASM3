@@ -41,6 +41,7 @@ const PerfumeDetail = () => {
     }
 
     const userHasCommented = user && perfume.comments.some(comment => comment.author._id === user._id);
+    const isExtrait = perfume.concentration === 'Extrait';
 
     const handleCommentSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,7 +68,7 @@ const PerfumeDetail = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className={`container mx-auto px-4 py-8 ${isExtrait ? 'bg-gradient-to-b from-amber-50/30 to-transparent' : ''}`}>
             <button
                 onClick={() => navigate('/')}
                 className="mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
@@ -75,25 +76,44 @@ const PerfumeDetail = () => {
                 ← Back to Collection
             </button>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-                    {perfume.uri ? (
-                        <img
-                            src={perfume.uri}
-                            alt={perfume.perfumeName}
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            No Image
-                        </div>
-                    )}
+            {isExtrait && (
+                <div className="mb-6 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-center gap-3">
+                    <span className="text-3xl">👑</span>
+                    <div>
+                        <h3 className="text-xl font-bold">Premium Extrait Collection</h3>
+                        <p className="text-sm opacity-90">The highest concentration of perfume essence</p>
+                    </div>
+                    <span className="text-3xl">👑</span>
+                </div>
+            )}
+
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 ${isExtrait ? 'border-4 border-transparent bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 p-1 rounded-lg' : ''}`}>
+                <div className={`${isExtrait ? 'bg-white rounded-lg p-2' : ''}`}>
+                    <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
+                        {perfume.uri ? (
+                            <img
+                                src={perfume.uri}
+                                alt={perfume.perfumeName}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                <div>
-                    <h1 className="text-4xl font-bold mb-4">{perfume.perfumeName}</h1>
-                    <p className="text-2xl text-gray-700 mb-2">{perfume.brand.brandName}</p>
-                    <p className="text-xl text-green-600 font-semibold mb-4">${perfume.price}</p>
+                <div className={`${isExtrait ? 'bg-gradient-to-b from-amber-50 to-white rounded-lg p-6' : ''}`}>
+                    <h1 className={`text-4xl font-bold mb-4 ${isExtrait ? 'text-amber-900' : ''}`}>
+                        {perfume.perfumeName}
+                    </h1>
+                    <p className={`text-2xl mb-2 ${isExtrait ? 'text-amber-800 font-semibold' : 'text-gray-700'}`}>
+                        {perfume.brand.brandName}
+                    </p>
+                    <p className={`text-xl font-semibold mb-4 ${isExtrait ? 'text-amber-600' : 'text-green-600'}`}>
+                        ${perfume.price}
+                    </p>
 
                     <div className="space-y-4">
                         <div>
@@ -103,7 +123,10 @@ const PerfumeDetail = () => {
 
                         <div>
                             <h2 className="text-lg font-semibold mb-1">Concentration</h2>
-                            <p className="text-gray-700">{perfume.concentration}</p>
+                            <p className={`font-semibold ${isExtrait ? 'text-amber-700 text-xl' : 'text-gray-700'}`}>
+                                {perfume.concentration}
+                                {isExtrait && ' ✨'}
+                            </p>
                         </div>
 
                         <div>

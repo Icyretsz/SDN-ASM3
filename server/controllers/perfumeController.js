@@ -86,17 +86,27 @@ exports.getDetailOfComment = async (req, res) => {
 
 exports.addComment = async (req, res) => {
     try {
-        const perfume = await Perfume.findById(req.params.id)
+        const authorId = req.user._id;
+        console.log('user', authorId)
+        const perfume = await Perfume.findById(req.params.id);
         if (!perfume) {
-            return res.status(404).json({status: false, message: 'Perfume not found!'})
+            return res.status(404).json({ status: false, message: 'Perfume not found!' });
         }
-        perfume.comments.push(req.body)
-        await perfume.save()
-        res.status(201).json({status: true, data: perfume})
+        console.log('perfume', perfume)
+        const alreadyCommented = perfume.comments.some(
+            (c) => c.author._id.toString() === authorId.toString()
+        );
+        if (alreadyCommented) {
+            return res.status(400).json({ status: false, message: 'You already commented on this perfume' });
+        }
+
+        perfume.comments.push(req.body);
+        await perfume.save();
+        res.status(201).json({ status: true, data: req.body });
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 exports.updateComment = async (req, res) => {
     try {
