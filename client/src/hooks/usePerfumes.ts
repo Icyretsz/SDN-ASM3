@@ -5,7 +5,7 @@ import type {Perfume, ApiResponse, CommentType, User} from '../types/api';
 export const perfumeKeys = {
   all: ['perfumes'] as const,
   lists: () => [...perfumeKeys.all, 'list'] as const,
-  list: (filters: Record<string, any>) => [...perfumeKeys.lists(), { filters }] as const,
+  list: (filters: Record<string, unknown>) => [...perfumeKeys.lists(), { filters }] as const,
   details: () => [...perfumeKeys.all, 'detail'] as const,
   detail: (id: string) => [...perfumeKeys.details(), id] as const,
 };
@@ -20,7 +20,7 @@ export const usePerfumesQuery = () => {
   return useQuery({
     queryKey: perfumeKeys.lists(),
     queryFn: async (): Promise<Perfume[]> => {
-      const response = await api.get<ApiResponse<Perfume[]>>('/perfume');
+      const response = await api.get<ApiResponse<Perfume[]>>('/perfumes');
       return response.data.data || [];
     },
   });
@@ -30,7 +30,7 @@ export const usePerfumeQuery = (perfumeId: string) => {
   return useQuery({
     queryKey: perfumeKeys.detail(perfumeId),
     queryFn: async (): Promise<Perfume> => {
-      const response = await api.get<ApiResponse<Perfume>>(`/perfume/${perfumeId}`);
+      const response = await api.get<ApiResponse<Perfume>>(`/perfumes/${perfumeId}`);
       if (!response.data.data) {
         throw new Error('Perfume not found');
       }
@@ -44,7 +44,7 @@ export const useCreatePerfumeMutation = () => {
 
   return useMutation({
     mutationFn: async (data: Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }): Promise<Perfume> => {
-      const response = await api.post<ApiResponse<Perfume>>('/perfume', data);
+      const response = await api.post<ApiResponse<Perfume>>('/perfumes', data);
       return response.data.data;
     },
     onSuccess: () => {
@@ -58,7 +58,7 @@ export const useUpdatePerfumeMutation = () => {
 
   return useMutation({
     mutationFn: async ({ perfumeId, data }: { perfumeId: string; data: Partial<Omit<Perfume, '_id' | 'comments' | 'brand'> & { brand: string }> }): Promise<Perfume> => {
-      const response = await api.put<ApiResponse<Perfume>>(`/perfume/${perfumeId}`, data);
+      const response = await api.put<ApiResponse<Perfume>>(`/perfumes/${perfumeId}`, data);
       return response.data.data;
     },
     onSuccess: (data, variables) => {
@@ -73,7 +73,7 @@ export const useDeletePerfumeMutation = () => {
 
   return useMutation({
     mutationFn: async (perfumeId: string): Promise<void> => {
-      await api.delete(`/perfume/${perfumeId}`);
+      await api.delete(`/perfumes/${perfumeId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: perfumeKeys.all });
@@ -85,7 +85,7 @@ export const useCommentsQuery = (perfumeId: string) => {
   return useQuery({
     queryKey: commentKeys.all(perfumeId),
     queryFn: async (): Promise<CommentType[]> => {
-      const response = await api.get<ApiResponse<CommentType[]>>(`/perfume/${perfumeId}/comment`);
+      const response = await api.get<ApiResponse<CommentType[]>>(`/perfumes/${perfumeId}/comment`);
       return response.data.data || [];
     },
     enabled: !!perfumeId,
@@ -96,7 +96,7 @@ export const useCommentQuery = (perfumeId: string, commentId: string) => {
   return useQuery({
     queryKey: commentKeys.detail(perfumeId, commentId),
     queryFn: async (): Promise<CommentType> => {
-      const response = await api.get<ApiResponse<CommentType>>(`/perfume/${perfumeId}/comment/${commentId}`);
+      const response = await api.get<ApiResponse<CommentType>>(`/perfumes/${perfumeId}/comment/${commentId}`);
       if (!response.data.data) {
         throw new Error('Comment not found');
       }
@@ -111,7 +111,7 @@ export const useAddCommentMutation = () => {
 
   return useMutation({
     mutationFn: async ({ perfumeId, data }: { perfumeId: string; data: { rating: number; content: string; author: User } }) => {
-      const response = await api.post<ApiResponse<Perfume>>(`/perfume/${perfumeId}/comment`, data);
+      const response = await api.post<ApiResponse<Perfume>>(`/perfumes/${perfumeId}/comment`, data);
       return response.data.data;
     },
     onSuccess: (data, variables) => {
@@ -126,7 +126,7 @@ export const useUpdateCommentMutation = () => {
 
   return useMutation({
     mutationFn: async ({ perfumeId, commentId, data }: { perfumeId: string; commentId: string; data: { rating?: number; content?: string } }) => {
-      const response = await api.put<ApiResponse<Perfume>>(`/perfume/${perfumeId}/comment/${commentId}`, data);
+      const response = await api.put<ApiResponse<Perfume>>(`/perfumes/${perfumeId}/comment/${commentId}`, data);
       return response.data.data;
     },
     onSuccess: (data, variables) => {
@@ -141,7 +141,7 @@ export const useDeleteCommentMutation = () => {
 
   return useMutation({
     mutationFn: async ({ perfumeId, commentId }: { perfumeId: string; commentId: string }) => {
-      const response = await api.delete<ApiResponse<void>>(`/perfume/${perfumeId}/comment/${commentId}`);
+      const response = await api.delete<ApiResponse<void>>(`/perfumes/${perfumeId}/comment/${commentId}`);
       return response.data;
     },
     onSuccess: (data, variables) => {

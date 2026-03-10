@@ -12,6 +12,7 @@ brandRouter.route('/')
 
 brandRouter.route('/:id')
     .get(BrandController.getDetailOfBrand)
+    .put(BrandController.updateBrand)
     .delete(BrandController.deleteBrand)
 
 module.exports = brandRouter

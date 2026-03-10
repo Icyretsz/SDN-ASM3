@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "699caaf5fa632835c2271d6c"
+  },
+  "brandName": "Chanel",
+  "updatedAt": {
+    "$date": "2026-03-10T15:15:25.267Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "699caaf5fa632835c2271d6d"
+  },
+  "brandName": "Dior"
+},
+{
+  "_id": {
+    "$oid": "699caaf5fa632835c2271d6e"
+  },
+  "brandName": "Tom Ford"
+},
+{
+  "_id": {
+    "$oid": "699caaf5fa632835c2271d6f"
+  },
+  "brandName": "Gucci"
+},
+{
+  "_id": {
+    "$oid": "699caaf5fa632835c2271d70"
+  },
+  "brandName": "Yves Saint Laurent"
+}]

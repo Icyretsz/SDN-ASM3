@@ -31,8 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use('/', indexRouter);
-app.use('/api/brand', brandRouter);
-app.use('/api/perfume', perfumeRouter);
+app.use('/api/brands', brandRouter);
+app.use('/api/perfumes', perfumeRouter);
 app.use('/api/auth', memberRouter)
 
 // catch 404 and forward to error handler

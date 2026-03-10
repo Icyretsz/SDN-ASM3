@@ -150,7 +150,7 @@ const PerfumeDetail = () => {
             <div className="mt-12 mx-auto w-[80%]">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold">Comments ({perfume.comments.length})</h2>
-                    {user && !userHasCommented && !showCommentForm && (
+                    {user && !userHasCommented && !showCommentForm && !user.isAdmin && (
                         <button
                             onClick={() => setShowCommentForm(true)}
                             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
@@ -169,6 +169,7 @@ const PerfumeDetail = () => {
                     {userHasCommented && (
                         <span className="text-gray-600">You have already commented on this perfume</span>
                     )}
+                    {user?.isAdmin && <span className="text-gray-600">Admin not allowed to leave a comment</span>}
                 </div>
 
                 {showCommentForm && (

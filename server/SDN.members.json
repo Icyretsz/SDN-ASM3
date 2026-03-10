@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "699c942b0d2aa9cb04b3aae5"
+  },
+  "email": "ubw1212@gmail.com",
+  "password": "$2b$08$2aXpitqgJ9XS5QTZLy2UeerMX2x/l7GnmVec/pVQMNgYCbwbwWlya",
+  "name": "Trần Minh Thiện",
+  "yob": "27/10/2004",
+  "gender": "male",
+  "isAdmin": false,
+  "createdAt": {
+    "$date": "2026-02-23T17:53:47.299Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T17:53:47.299Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699ca6db0255a742808c98ed"
+  },
+  "email": "deodkew@gmail.com",
+  "password": "$2b$08$IP0UdTjGLDq2RJz.HQDAKO16K9N.X.6p2jqwoGd19PFTmEHaLgS02",
+  "name": "Trần Minh Thiệns",
+  "yob": "27/10/2004",
+  "gender": "male",
+  "isAdmin": true,
+  "createdAt": {
+    "$date": "2026-02-23T19:13:31.446Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-04T09:35:29.648Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699cc7fe31b86d317ff540cf"
+  },
+  "email": "qwdqwd@gmail.com",
+  "password": "$2b$08$6VajhGp0t88g/0mcMMQV9OMZvQovIO/.z2cu0ehKICtsiHA08i2jW",
+  "name": "smoking_Cessation_Platform",
+  "yob": "1999",
+  "gender": "male",
+  "isAdmin": false,
+  "createdAt": {
+    "$date": "2026-02-23T21:34:54.145Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-23T21:34:54.145Z"
+  },
+  "__v": 0
+}]
