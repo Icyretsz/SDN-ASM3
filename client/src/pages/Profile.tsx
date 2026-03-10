@@ -8,7 +8,7 @@ const Profile = () => {
   const user = useAuthStore((state) => state.user);
   const updateProfileMutation = useUpdateProfileMutation();
   const changePasswordMutation = useChangePasswordMutation();
-  const { data: userComments, isLoading: commentsLoading, isError: commentsError, error: commentsErrorData } = useUserComments(user?._id || '');
+  const { data: userComments, isLoading: commentsLoading, isError: commentsError } = useUserComments(user?._id || '');
 
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
@@ -44,20 +44,19 @@ const Profile = () => {
     });
   };
 
-  const handleProfileSubmit = async (e: React.FormEvent) => {
+  const handleProfileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await updateProfileMutation.mutateAsync({
         userId: user._id,
         data: profileData,
       });
-      alert('Profile updated successfully');
     } catch (error) {
       console.error('Profile update failed:', error);
     }
   };
 
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
@@ -71,7 +70,6 @@ const Profile = () => {
         oldPassword: passwordData.oldPassword,
         newPassword: passwordData.newPassword,
       });
-      alert('Password changed successfully');
       setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
       setShowPasswordForm(false);
     } catch (error) {
@@ -80,239 +78,266 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <button
-        onClick={() => navigate('/')}
-        className="mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-      >
-        ← Back to Home
-      </button>
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Back Button */}
+        <button
+          onClick={() => navigate('/')}
+          className="cursor pointer mb-4 sm:mb-6 px-4 sm:px-6 py-2 sm:py-3 bg-white hover:bg-gray-50 rounded-xl shadow-sm transition-all flex items-center gap-2 text-gray-700 font-medium text-sm sm:text-base"
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="hidden sm:inline">Back to Home</span>
+          <span className="sm:hidden">Back</span>
+        </button>
 
-      <h1 className="text-3xl font-bold mb-8">My Profile</h1>
-
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-4">Profile Information</h2>
-        <form onSubmit={handleProfileSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={profileData.name}
-              onChange={handleProfileChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+        {/* Header */}
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center text-white text-3xl sm:text-4xl font-bold mx-auto mb-3 sm:mb-4 shadow-lg">
+            {user.name.charAt(0).toUpperCase()}
           </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">My Profile</h1>
+          <p className="text-sm sm:text-base text-gray-600 px-4">Manage your account settings and preferences</p>
+        </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={profileData.email}
-              onChange={handleProfileChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Profile Information */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Profile Information</h2>
+          <form onSubmit={handleProfileSubmit} className="space-y-5">
+            <div>
+              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={profileData.name}
+                onChange={handleProfileChange}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="yob" className="block text-sm font-medium text-gray-700">
-              Year of Birth
-            </label>
-            <input
-              id="yob"
-              name="yob"
-              type="text"
-              required
-              value={profileData.yob}
-              onChange={handleProfileChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={profileData.email}
+                onChange={handleProfileChange}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-              Gender
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              required
-              value={profileData.gender}
-              onChange={handleProfileChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label htmlFor="yob" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Year of Birth
+                </label>
+                <input
+                  id="yob"
+                  name="yob"
+                  type="text"
+                  required
+                  value={profileData.yob}
+                  onChange={handleProfileChange}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="gender" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  required
+                  value={profileData.gender}
+                  onChange={handleProfileChange}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+
+            {updateProfileMutation.isError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                Profile update failed. Please try again.
+              </div>
+            )}
+
+            {updateProfileMutation.isSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
+                ✓ Profile updated successfully!
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={updateProfileMutation.isPending}
+              className="w-full py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
             >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
-
-          {updateProfileMutation.isError && (
-            <div className="text-red-600 text-sm">
-              {updateProfileMutation.error?.response?.data?.message || 'Profile update failed. Please try again.'}
-            </div>
-          )}
-
-          {updateProfileMutation.isSuccess && (
-            <div className="text-green-600 text-sm">
-              Profile updated successfully!
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={updateProfileMutation.isPending}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50"
-          >
-            {updateProfileMutation.isPending ? 'Updating...' : 'Update Profile'}
-          </button>
-        </form>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-semibold mb-4">Change Password</h2>
-
-        {!showPasswordForm ? (
-          <button
-            onClick={() => setShowPasswordForm(true)}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md"
-          >
-            Change Password
-          </button>
-        ) : (
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700">
-                Current Password
-              </label>
-              <input
-                id="oldPassword"
-                name="oldPassword"
-                type="password"
-                required
-                value={passwordData.oldPassword}
-                onChange={handlePasswordChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-                New Password
-              </label>
-              <input
-                id="newPassword"
-                name="newPassword"
-                type="password"
-                required
-                value={passwordData.newPassword}
-                onChange={handlePasswordChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm New Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {changePasswordMutation.isError && (
-              <div className="text-red-600 text-sm">
-                {changePasswordMutation.error?.response?.data?.message || 'Password change failed. Please check your current password.'}
-              </div>
-            )}
-
-            {changePasswordMutation.isSuccess && (
-              <div className="text-green-600 text-sm">
-                Password changed successfully!
-              </div>
-            )}
-
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={changePasswordMutation.isPending}
-                className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:opacity-50"
-              >
-                {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowPasswordForm(false);
-                  setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
-                }}
-                className="flex-1 py-2 px-4 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md"
-              >
-                Cancel
-              </button>
-            </div>
+              {updateProfileMutation.isPending ? 'Updating...' : 'Update Profile'}
+            </button>
           </form>
-        )}
-      </div>
+        </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-        <h2 className="text-2xl font-semibold mb-4">My Comments</h2>
-        {commentsLoading ? (
-          <p className="text-gray-500">Loading comments...</p>
-        ) : commentsError ? (
-          <div className="text-red-600 text-sm">
-            {commentsErrorData?.response?.data?.message || 'Failed to load comments. Please try again later.'}
-          </div>
-        ) : userComments && userComments.length > 0 ? (
-          <div className="space-y-4">
-            {userComments.map((comment) => (
-              <div key={comment._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <h3 
-                      className="font-semibold text-lg text-blue-600 hover:text-blue-800 cursor-pointer"
-                      onClick={() => navigate(`/perfume/${comment.perfume._id}`)}
-                    >
-                      {comment.perfume.perfumeName}
-                    </h3>
-                    <p className="text-sm text-gray-500">{comment.perfume.brand.brandName}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(3)].map((_, i) => (
-                      <span key={i} className={i < comment.rating ? 'text-yellow-400' : 'text-gray-300'}>
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <p className="text-gray-700 mb-2">{comment.content}</p>
-                <p className="text-xs text-gray-400">
-                  {new Date(comment.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
+        {/* Change Password */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Security</h2>
+
+          {!showPasswordForm ? (
+            <button
+              onClick={() => setShowPasswordForm(true)}
+              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
+            >
+              Change Password
+            </button>
+          ) : (
+            <form onSubmit={handlePasswordSubmit} className="space-y-5">
+              <div>
+                <label htmlFor="oldPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Current Password
+                </label>
+                <input
+                  id="oldPassword"
+                  name="oldPassword"
+                  type="password"
+                  required
+                  value={passwordData.oldPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                />
               </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">You haven't written any comments yet.</p>
-        )}
+
+              <div>
+                <label htmlFor="newPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+                  New Password
+                </label>
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type="password"
+                  required
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Confirm New Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              {changePasswordMutation.isError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                  Password change failed. Please check your current password.
+                </div>
+              )}
+
+              {changePasswordMutation.isSuccess && (
+                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
+                  ✓ Password changed successfully!
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  disabled={changePasswordMutation.isPending}
+                  className="flex-1 py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
+                >
+                  {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPasswordForm(false);
+                    setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
+                  }}
+                  className="flex-1 py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+
+        {/* My Reviews */}
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">My Reviews</h2>
+          {commentsLoading ? (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-rose-500 mb-4"></div>
+              <p className="text-gray-600">Loading reviews...</p>
+            </div>
+          ) : commentsError ? (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              Failed to load reviews. Please try again later.
+            </div>
+          ) : userComments && userComments.length > 0 ? (
+            <div className="space-y-4">
+              {userComments.map((comment) => (
+                <div 
+                  key={comment._id} 
+                  className="bg-gradient-to-br from-gray-50 to-white border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-all cursor-pointer"
+                  onClick={() => navigate(`/perfumes/${comment.perfume._id}`)}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-lg text-gray-800 hover:text-rose-600 transition-colors">
+                        {comment.perfume.perfumeName}
+                      </h3>
+                      <p className="text-sm text-gray-600">{comment.perfume.brand.brandName}</p>
+                    </div>
+                    <div className="flex items-center gap-1 bg-amber-50 px-3 py-1 rounded-full">
+                      <span className="text-amber-500">⭐</span>
+                      <span className="font-bold text-amber-700">{comment.rating}/3</span>
+                    </div>
+                  </div>
+                  <p className="text-gray-700 mb-3">{comment.content}</p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <p className="text-gray-500">You haven't written any reviews yet.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
