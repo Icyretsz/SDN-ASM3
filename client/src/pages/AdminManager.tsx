@@ -26,6 +26,7 @@ const AdminManager: React.FC = () => {
 
   // Brand form state
   const [brandName, setBrandName] = useState('');
+  const [brandNameError, setBrandNameError] = useState('');
 
   // Perfume form state
   const [perfumeForm, setPerfumeForm] = useState({
@@ -39,6 +40,7 @@ const AdminManager: React.FC = () => {
     targetAudience: 'unisex' as 'male' | 'female' | 'unisex',
     brand: ''
   });
+  const [perfumeNameError, setPerfumeNameError] = useState('');
 
   // Queries
   const { data: brands = [], isLoading: brandsLoading } = useBrandsQuery();
@@ -70,6 +72,19 @@ const AdminManager: React.FC = () => {
   const handleCreateBrand = (e: React.FormEvent) => {
     e.preventDefault();
     if (brandName.trim()) {
+      // Check for duplicate brand name (case-insensitive)
+      const isDuplicate = brands.some(brand => 
+        brand.brandName.toLowerCase() === brandName.trim().toLowerCase() && 
+        brand._id !== editingBrand?._id
+      );
+      
+      if (isDuplicate) {
+        setBrandNameError('A brand with this name already exists');
+        return;
+      }
+      
+      setBrandNameError('');
+      
       if (editingBrand) {
         updateBrandMutation.mutate({
           brandId: editingBrand._id,
@@ -79,6 +94,12 @@ const AdminManager: React.FC = () => {
             setBrandName('');
             setEditingBrand(null);
             setShowBrandForm(false);
+          },
+          onError: (error: unknown) => {
+            const errorMessage = error instanceof Error && 'response' in error 
+              ? (error as { response?: { data?: { message?: string } } }).response?.data?.message 
+              : 'Failed to update brand';
+            setBrandNameError(errorMessage || 'Failed to update brand');
           }
         });
       } else {
@@ -86,6 +107,12 @@ const AdminManager: React.FC = () => {
           onSuccess: () => {
             setBrandName('');
             setShowBrandForm(false);
+          },
+          onError: (error: unknown) => {
+            const errorMessage = error instanceof Error && 'response' in error 
+              ? (error as { response?: { data?: { message?: string } } }).response?.data?.message 
+              : 'Failed to create brand';
+            setBrandNameError(errorMessage || 'Failed to create brand');
           }
         });
       }
@@ -95,17 +122,33 @@ const AdminManager: React.FC = () => {
   const handleEditBrand = (brand: Brand) => {
     setEditingBrand(brand);
     setBrandName(brand.brandName);
+    setBrandNameError('');
     setShowBrandForm(true);
   };
 
   const handleCancelBrandEdit = () => {
     setEditingBrand(null);
     setBrandName('');
+    setBrandNameError('');
     setShowBrandForm(false);
   };
 
   const handleCreatePerfume = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check for duplicate perfume name (case-insensitive)
+    const isDuplicate = perfumes.some(perfume => 
+      perfume.perfumeName.toLowerCase() === perfumeForm.perfumeName.trim().toLowerCase() && 
+      perfume._id !== editingPerfume?._id
+    );
+    
+    if (isDuplicate) {
+      setPerfumeNameError('A perfume with this name already exists');
+      return;
+    }
+    
+    setPerfumeNameError('');
+    
     if (editingPerfume) {
       updatePerfumeMutation.mutate({
         perfumeId: editingPerfume._id,
@@ -115,6 +158,12 @@ const AdminManager: React.FC = () => {
           resetPerfumeForm();
           setEditingPerfume(null);
           setShowPerfumeForm(false);
+        },
+        onError: (error: unknown) => {
+          const errorMessage = error instanceof Error && 'response' in error 
+            ? (error as { response?: { data?: { message?: string } } }).response?.data?.message 
+            : 'Failed to update perfume';
+          setPerfumeNameError(errorMessage || 'Failed to update perfume');
         }
       });
     } else {
@@ -122,6 +171,12 @@ const AdminManager: React.FC = () => {
         onSuccess: () => {
           resetPerfumeForm();
           setShowPerfumeForm(false);
+        },
+        onError: (error: unknown) => {
+          const errorMessage = error instanceof Error && 'response' in error 
+            ? (error as { response?: { data?: { message?: string } } }).response?.data?.message 
+            : 'Failed to create perfume';
+          setPerfumeNameError(errorMessage || 'Failed to create perfume');
         }
       });
     }
@@ -140,12 +195,14 @@ const AdminManager: React.FC = () => {
       targetAudience: perfume.targetAudience,
       brand: perfume.brand._id
     });
+    setPerfumeNameError('');
     setShowPerfumeForm(true);
   };
 
   const handleCancelEdit = () => {
     setEditingPerfume(null);
     resetPerfumeForm();
+    setPerfumeNameError('');
     setShowPerfumeForm(false);
   };
 
@@ -296,11 +353,26 @@ const AdminManager: React.FC = () => {
                     <input
                       type="text"
                       value={brandName}
-                      onChange={(e) => setBrandName(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                      onChange={(e) => {
+                        setBrandName(e.target.value);
+                        setBrandNameError('');
+                      }}
+                      className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
+                        brandNameError 
+                          ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                          : 'border-gray-200 focus:ring-rose-500 focus:border-transparent'
+                      }`}
                       placeholder="Enter brand name"
                       required
                     />
+                    {brandNameError && (
+                      <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        {brandNameError}
+                      </p>
+                    )}
                   </div>
                   <div className="flex space-x-3">
                     <button
@@ -412,11 +484,26 @@ const AdminManager: React.FC = () => {
                       <input
                         type="text"
                         value={perfumeForm.perfumeName}
-                        onChange={(e) => setPerfumeForm({ ...perfumeForm, perfumeName: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                        onChange={(e) => {
+                          setPerfumeForm({ ...perfumeForm, perfumeName: e.target.value });
+                          setPerfumeNameError('');
+                        }}
+                        className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
+                          perfumeNameError 
+                            ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                            : 'border-gray-200 focus:ring-rose-500 focus:border-transparent'
+                        }`}
                         placeholder="e.g., Chanel No. 5"
                         required
                       />
+                      {perfumeNameError && (
+                        <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                          {perfumeNameError}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">

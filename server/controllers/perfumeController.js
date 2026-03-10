@@ -12,6 +12,20 @@ exports.getAllPerfumes = async (req, res) => {
 
 exports.createPerfume = async (req, res) => {
     try {
+        const { perfumeName } = req.body
+        
+        // Check for duplicate perfume name (case-insensitive)
+        const existingPerfume = await Perfume.findOne({ 
+            perfumeName: { $regex: new RegExp(`^${perfumeName}$`, 'i') } 
+        })
+        
+        if (existingPerfume) {
+            return res.status(409).json({
+                status: false, 
+                message: 'A perfume with this name already exists'
+            })
+        }
+        
         const perfume = await Perfume.create(req.body)
         res.status(201).json({status: true, data: perfume})
     } catch (error) {
@@ -33,6 +47,23 @@ exports.getDetailOfPerfume = async (req, res) => {
 
 exports.updatePerfume = async (req, res) => {
     try {
+        const { perfumeName } = req.body
+        
+        // Check for duplicate perfume name (case-insensitive), excluding current perfume
+        if (perfumeName) {
+            const existingPerfume = await Perfume.findOne({ 
+                perfumeName: { $regex: new RegExp(`^${perfumeName}$`, 'i') },
+                _id: { $ne: req.params.id }
+            })
+            
+            if (existingPerfume) {
+                return res.status(409).json({
+                    status: false, 
+                    message: 'A perfume with this name already exists'
+                })
+            }
+        }
+        
         const perfume = await Perfume.findByIdAndUpdate(req.params.id, req.body, {new: true})
         if (!perfume) {
             return res.status(404).json({status: false, message: 'Perfume not found!'})

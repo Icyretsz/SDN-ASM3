@@ -12,6 +12,20 @@ exports.getAllBrands = async (req, res) => {
 
 exports.createBrand = async (req, res) => {
     try {
+        const { brandName } = req.body
+        
+        // Check for duplicate brand name (case-insensitive)
+        const existingBrand = await Brand.findOne({ 
+            brandName: { $regex: new RegExp(`^${brandName}$`, 'i') } 
+        })
+        
+        if (existingBrand) {
+            return res.status(409).json({
+                status: false, 
+                message: 'A brand with this name already exists'
+            })
+        }
+        
         const brand = await Brand.create(req.body)
         res.status(201).json({status: true, data: brand})
     } catch (error) {
@@ -33,6 +47,21 @@ exports.getDetailOfBrand = async (req, res) => {
 
 exports.updateBrand = async (req, res) => {
     try {
+        const { brandName } = req.body
+        
+        // Check for duplicate brand name (case-insensitive), excluding current brand
+        const existingBrand = await Brand.findOne({ 
+            brandName: { $regex: new RegExp(`^${brandName}$`, 'i') },
+            _id: { $ne: req.params.id }
+        })
+        
+        if (existingBrand) {
+            return res.status(409).json({
+                status: false, 
+                message: 'A brand with this name already exists'
+            })
+        }
+        
         const brand = await Brand.findByIdAndUpdate(req.params.id, req.body, {new: true})
         if (!brand) {
             return res.status(404).json({status: false, message: 'Brand not found!'})
