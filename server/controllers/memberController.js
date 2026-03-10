@@ -66,7 +66,7 @@ exports.update = async (req, res) => {
         const currentAccount = req.user
         const jwtSecret = process.env.JWT_SECRET
 
-        if (id !== currentAccount.id && !currentAccount.isAdmin) {
+        if (id !== currentAccount.id) {
             return res.status(403).json({ success: false, message: "Can't update other user's account" })
         }
 
