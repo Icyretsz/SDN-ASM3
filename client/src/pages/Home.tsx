@@ -2,6 +2,7 @@ import { usePerfumesQuery } from '../hooks/usePerfumes.ts';
 import { useBrandsQuery } from '../hooks/useBrands.ts'
 import { useNavigate } from 'react-router';
 import { useState, useMemo } from 'react';
+import ExtraitCarousel from '../components/ExtraitCarousel';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -69,6 +70,9 @@ const Home = () => {
                     </h1>
                     <p className="text-base sm:text-lg lg:text-xl text-gray-600 px-4">Explore our curated collection of luxury fragrances</p>
                 </div>
+
+                {/* Extrait Carousel */}
+                <ExtraitCarousel perfumes={perfumes || []} />
 
                 {/* Search Bar */}
                 <div className="mb-8 sm:mb-12 max-w-2xl mx-auto flex items-center gap-10">
@@ -160,7 +164,7 @@ const Home = () => {
                                         <span className="text-xl sm:text-2xl font-bold text-rose-600">
                                             ${perfume.price}
                                         </span>
-                                        <button className="text-xs sm:text-sm text-rose-600 font-semibold hover:text-rose-700 flex items-center gap-1">
+                                        <button className="cursor-pointer text-xs sm:text-sm text-rose-600 font-semibold hover:text-rose-700 flex items-center gap-1">
                                             View Details
                                             <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

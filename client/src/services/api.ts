@@ -25,7 +25,16 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().clearAuth();
-      window.location.href = '/login';
+      // Only redirect to login if we're not already on a public page
+      const publicPaths = ['/', '/login', '/signup', '/perfumes'];
+      const currentPath = window.location.pathname;
+      const isPublicPath = publicPaths.some(path => 
+        currentPath === path || currentPath.startsWith('/perfumes/')
+      );
+      
+      if (!isPublicPath) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

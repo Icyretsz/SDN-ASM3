@@ -24,11 +24,10 @@ const AdminManager: React.FC = () => {
     cascadeInfo?: string;
   } | null>(null);
 
-  // Brand form state
   const [brandName, setBrandName] = useState('');
   const [brandNameError, setBrandNameError] = useState('');
+  const [brandSuccess, setBrandSuccess] = useState('');
 
-  // Perfume form state
   const [perfumeForm, setPerfumeForm] = useState({
     perfumeName: '',
     uri: '',
@@ -41,6 +40,7 @@ const AdminManager: React.FC = () => {
     brand: ''
   });
   const [perfumeNameError, setPerfumeNameError] = useState('');
+  const [perfumeSuccess, setPerfumeSuccess] = useState('');
 
   // Queries
   const { data: brands = [], isLoading: brandsLoading } = useBrandsQuery();
@@ -94,6 +94,8 @@ const AdminManager: React.FC = () => {
             setBrandName('');
             setEditingBrand(null);
             setShowBrandForm(false);
+            setBrandSuccess('Brand updated successfully!');
+            setTimeout(() => setBrandSuccess(''), 3000);
           },
           onError: (error: unknown) => {
             const errorMessage = error instanceof Error && 'response' in error 
@@ -107,6 +109,8 @@ const AdminManager: React.FC = () => {
           onSuccess: () => {
             setBrandName('');
             setShowBrandForm(false);
+            setBrandSuccess('Brand created successfully!');
+            setTimeout(() => setBrandSuccess(''), 3000);
           },
           onError: (error: unknown) => {
             const errorMessage = error instanceof Error && 'response' in error 
@@ -158,6 +162,8 @@ const AdminManager: React.FC = () => {
           resetPerfumeForm();
           setEditingPerfume(null);
           setShowPerfumeForm(false);
+          setPerfumeSuccess('Perfume updated successfully!');
+          setTimeout(() => setPerfumeSuccess(''), 3000);
         },
         onError: (error: unknown) => {
           const errorMessage = error instanceof Error && 'response' in error 
@@ -171,6 +177,8 @@ const AdminManager: React.FC = () => {
         onSuccess: () => {
           resetPerfumeForm();
           setShowPerfumeForm(false);
+          setPerfumeSuccess('Perfume created successfully!');
+          setTimeout(() => setPerfumeSuccess(''), 3000);
         },
         onError: (error: unknown) => {
           const errorMessage = error instanceof Error && 'response' in error 
@@ -273,7 +281,7 @@ const AdminManager: React.FC = () => {
         <div className="flex space-x-2 mb-8 bg-white p-2 rounded-xl shadow-sm">
           <button
             onClick={() => setActiveTab('brands')}
-            className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`cursor-pointer flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
               activeTab === 'brands'
                 ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-50'
@@ -288,7 +296,7 @@ const AdminManager: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('perfumes')}
-            className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`cursor-pointer flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
               activeTab === 'perfumes'
                 ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-50'
@@ -303,7 +311,7 @@ const AdminManager: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('users')}
-            className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
+            className={`cursor-pointer flex-1 px-6 py-3 rounded-lg font-medium transition-all ${
               activeTab === 'users'
                 ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md'
                 : 'text-gray-600 hover:bg-gray-50'
@@ -329,7 +337,7 @@ const AdminManager: React.FC = () => {
                   setBrandName('');
                   setShowBrandForm(!showBrandForm);
                 }}
-                className={`px-6 py-3 rounded-xl font-medium transition-all shadow-md ${
+                className={`cursor-pointer px-6 py-3 rounded-xl font-medium transition-all shadow-md ${
                   showBrandForm
                     ? 'bg-gray-500 hover:bg-gray-600 text-white'
                     : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white'
@@ -397,6 +405,16 @@ const AdminManager: React.FC = () => {
               </div>
             )}
 
+            {/* Success Message */}
+            {brandSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                {brandSuccess}
+              </div>
+            )}
+
             {/* Brands List */}
             {brandsLoading ? (
               <div className="text-center py-12">
@@ -428,14 +446,14 @@ const AdminManager: React.FC = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEditBrand(brand)}
-                          className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-sm font-medium"
+                          className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-sm font-medium"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDeleteBrand(brand._id, brand.brandName)}
                           disabled={deleteBrandMutation.isPending}
-                          className="bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 disabled:opacity-50 transition-all shadow-sm font-medium"
+                          className="cursor-pointer bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 disabled:opacity-50 transition-all shadow-sm font-medium"
                         >
                           Delete
                         </button>
@@ -459,7 +477,7 @@ const AdminManager: React.FC = () => {
                   resetPerfumeForm();
                   setShowPerfumeForm(!showPerfumeForm);
                 }}
-                className={`px-6 py-3 rounded-xl font-medium transition-all shadow-md ${
+                className={`cursor-pointer px-6 py-3 rounded-xl font-medium transition-all shadow-md ${
                   showPerfumeForm
                     ? 'bg-gray-500 hover:bg-gray-600 text-white'
                     : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white'
@@ -624,7 +642,7 @@ const AdminManager: React.FC = () => {
                     <button
                       type="submit"
                       disabled={createPerfumeMutation.isPending || updatePerfumeMutation.isPending}
-                      className="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 disabled:opacity-50 transition-all shadow-md font-medium"
+                      className="cursor-pointer bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 disabled:opacity-50 transition-all shadow-md font-medium"
                     >
                       {(createPerfumeMutation.isPending || updatePerfumeMutation.isPending)
                         ? (editingPerfume ? 'Updating...' : 'Creating...')
@@ -634,12 +652,22 @@ const AdminManager: React.FC = () => {
                     <button
                       type="button"
                       onClick={handleCancelEdit}
-                      className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium"
+                      className="cursor-pointer bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium"
                     >
                       Cancel
                     </button>
                   </div>
                 </form>
+              </div>
+            )}
+
+            {/* Success Message */}
+            {perfumeSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                {perfumeSuccess}
               </div>
             )}
 
@@ -673,14 +701,14 @@ const AdminManager: React.FC = () => {
                           <div className="flex space-x-2">
                             <button
                               onClick={() => handleEditPerfume(perfume)}
-                              className="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-sm font-medium"
+                              className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-sm font-medium"
                             >
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeletePerfume(perfume._id, perfume.perfumeName)}
                               disabled={deletePerfumeMutation.isPending}
-                              className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 disabled:opacity-50 transition-all shadow-sm font-medium"
+                              className="cursor-pointer bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 disabled:opacity-50 transition-all shadow-sm font-medium"
                             >
                               Delete
                             </button>

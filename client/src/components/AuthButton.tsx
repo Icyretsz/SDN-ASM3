@@ -19,7 +19,7 @@ const AuthButton = ({ type, onClick }: AuthButtonProps) => {
     return (
         <button
             onClick={onClick}
-            className={`${colors[type]} text-white px-4 py-2 rounded-xl transition-transform hover:scale-105`}
+            className={`${colors[type]} cursor-pointer text-white px-4 py-2 rounded-xl transition-transform hover:scale-105`}
         >
             {labels[type]}
         </button>

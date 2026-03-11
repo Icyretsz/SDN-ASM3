@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuthStore } from '../stores/authStore';
 import { useUpdateProfileMutation, useChangePasswordMutation, useUserComments } from '../hooks/useAuth';
@@ -24,6 +24,24 @@ const Profile = () => {
   });
 
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [profileSuccess, setProfileSuccess] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+
+  useEffect(() => {
+    if (updateProfileMutation.isSuccess) {
+      setProfileSuccess(true);
+      const t = setTimeout(() => setProfileSuccess(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [updateProfileMutation.isSuccess]);
+
+  useEffect(() => {
+    if (changePasswordMutation.isSuccess) {
+      setPasswordSuccess(true);
+      const t = setTimeout(() => setPasswordSuccess(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [changePasswordMutation.isSuccess]);
 
   if (!user) {
     navigate('/login');
@@ -83,7 +101,7 @@ const Profile = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate('/')}
-          className="cursor pointer mb-4 sm:mb-6 px-4 sm:px-6 py-2 sm:py-3 bg-white hover:bg-gray-50 rounded-xl shadow-sm transition-all flex items-center gap-2 text-gray-700 font-medium text-sm sm:text-base"
+          className="cursor-pointer mb-4 sm:mb-6 px-4 sm:px-6 py-2 sm:py-3 bg-white hover:bg-gray-50 rounded-xl shadow-sm transition-all flex items-center gap-2 text-gray-700 font-medium text-sm sm:text-base"
         >
           <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -175,8 +193,8 @@ const Profile = () => {
               </div>
             )}
 
-            {updateProfileMutation.isSuccess && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
+            {profileSuccess && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm transition-opacity duration-500">
                 ✓ Profile updated successfully!
               </div>
             )}
@@ -184,7 +202,7 @@ const Profile = () => {
             <button
               type="submit"
               disabled={updateProfileMutation.isPending}
-              className="w-full py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
+              className="cursor-pointer w-full py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
             >
               {updateProfileMutation.isPending ? 'Updating...' : 'Update Profile'}
             </button>
@@ -197,8 +215,11 @@ const Profile = () => {
 
           {!showPasswordForm ? (
             <button
-              onClick={() => setShowPasswordForm(true)}
-              className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
+              onClick={() => {
+                setShowPasswordForm(true);
+                setPasswordSuccess(false);
+              }}
+              className="cursor-pointer px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
             >
               Change Password
             </button>
@@ -255,17 +276,11 @@ const Profile = () => {
                 </div>
               )}
 
-              {changePasswordMutation.isSuccess && (
-                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm">
-                  ✓ Password changed successfully!
-                </div>
-              )}
-
               <div className="flex gap-3">
                 <button
                   type="submit"
                   disabled={changePasswordMutation.isPending}
-                  className="flex-1 py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
+                  className="cursor-pointer flex-1 py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50"
                 >
                   {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
                 </button>
@@ -275,12 +290,18 @@ const Profile = () => {
                     setShowPasswordForm(false);
                     setPasswordData({ oldPassword: '', newPassword: '', confirmPassword: '' });
                   }}
-                  className="flex-1 py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
+                  className="cursor-pointer flex-1 py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all"
                 >
                   Cancel
                 </button>
               </div>
             </form>
+          )}
+
+          {passwordSuccess && (
+            <div className="mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm transition-opacity duration-500">
+              ✓ Password changed successfully!
+            </div>
           )}
         </div>
 
@@ -299,8 +320,8 @@ const Profile = () => {
           ) : userComments && userComments.length > 0 ? (
             <div className="space-y-4">
               {userComments.map((comment) => (
-                <div 
-                  key={comment._id} 
+                <div
+                  key={comment._id}
                   className="bg-gradient-to-br from-gray-50 to-white border border-gray-100 rounded-2xl p-6 hover:shadow-md transition-all cursor-pointer"
                   onClick={() => navigate(`/perfumes/${comment.perfume._id}`)}
                 >

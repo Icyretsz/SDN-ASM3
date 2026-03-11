@@ -82,7 +82,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer w-full py-3 px-6 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white rounded-xl font-medium shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loginMutation.isPending ? (
                 <span className="flex items-center justify-center gap-2">
@@ -112,7 +112,7 @@ const Login = () => {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate('/')}
-            className="text-gray-600 hover:text-gray-800 font-medium transition-colors flex items-center gap-2 mx-auto"
+            className="cursor-pointer text-gray-600 hover:text-gray-800 font-medium transition-colors flex items-center gap-2 mx-auto"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
